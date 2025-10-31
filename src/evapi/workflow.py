@@ -26,7 +26,11 @@ class Workflow:
 
     def send_email(self, workflow: str, wsids: str, context: dict = {}) -> str:
         try:
-            return self.do_workflow('send email ' + workflow.lower(), wsids, context)
+            if not workflow.lower().startswith("send email "):
+                wfname = "send email " + workflow.lower()
+            else:
+                wfname = workflow
+            return self.do_workflow(wfname, wsids, context)
         except (AttributeError, TypeError, ValueError) as e:
             logger.error("Error in send email workflow %s %s %s: %s", workflow, wsids, context, e)
             return "Failed"
